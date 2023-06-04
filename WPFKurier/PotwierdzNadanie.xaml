@@ -1,0 +1,26 @@
+﻿<Window x:Class="CourierApp.PotwierdzNadanie"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Potwierdzenie nadania paczki" Height="400" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Czy wszystkie wprowadzone dane się zgadzają?" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <StackPanel Grid.Row="1" Margin="20" Height="auto">
+            <TextBlock Name="tbDetails" Text="Szczegóły przesyłki:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10" />
+
+            <!-- Tutaj umieść kontrole wyświetlające szczegóły przesyłki -->
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+            <Button Content="Anuluj" Width="100" Margin="10" Click="Anuluj_Click" />
+            <Button Content="Nadaj" Width="100" Margin="10" Click="Nadaj_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
