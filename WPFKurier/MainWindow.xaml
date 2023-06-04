@@ -1,12 +1,36 @@
-﻿<Window x:Class="WPFKurier.MainWindow"
+﻿<Window x:Class="CourierApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFKurier"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Zarządzanie przesyłkami" Height="400" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <!-- Nagłówek -->
+        <Border Grid.Row="0" Background="#2D3142" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Zarządzanie przesyłkami" FontSize="28" Foreground="White" />
+                <Button Content="Nadaj przesyłkę" HorizontalAlignment="Right" Margin="10,0,0,0" Grid.Column="1" Click="NadajPrzesylke_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="#4d5161" BorderThickness="1" BorderBrush="Black" CornerRadius="4">
+                                <TextBlock Text="Nadaj przesyłkę" FontSize="16" Foreground="White" Padding="10" />
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Treść -->
+        <StackPanel Grid.Row="1" Margin="10">
+            <!-- Dodaj kontrolki do wprowadzania danych nadawcy/odbiorcy itp. -->
+        </StackPanel>
     </Grid>
 </Window>

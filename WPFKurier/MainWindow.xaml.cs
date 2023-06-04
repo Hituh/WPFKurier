@@ -10,19 +10,37 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPFKurier
+namespace CourierApp
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ZarzadzajPrzesylkamiWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private NadajPrzesylkeWindow nadajPrzesylkeWindow;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void NadajPrzesylke_Click(object sender, RoutedEventArgs e)
+        {
+            if (nadajPrzesylkeWindow == null)
+            {
+                nadajPrzesylkeWindow = new NadajPrzesylkeWindow();
+                nadajPrzesylkeWindow.Owner = this;
+                nadajPrzesylkeWindow.Closed += NadajPrzesylkeWindow_Closed;
+                nadajPrzesylkeWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                nadajPrzesylkeWindow.ShowDialog();
+            }
+        }
+
+        private void NadajPrzesylkeWindow_Closed(object sender, EventArgs e)
+        {
+            nadajPrzesylkeWindow = null;
         }
     }
 }
