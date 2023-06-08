@@ -31,37 +31,16 @@
             <TextBlock Text="Rozmiar przesyłki:" />
 
             <!-- ComboBox wyboru rozmiaru koperty -->
-            <ComboBox Name="cbRozmiarKoperty" Visibility="Visible">
-                <ComboBoxItem Content="DL" />
-                <ComboBoxItem Content="C7" />
-                <ComboBoxItem Content="C6" />
-                <ComboBoxItem Content="C5" />
-                <ComboBoxItem Content="C4" />
-                <ComboBoxItem Content="C3" />
-                <ComboBoxItem Content="B6" />
-                <ComboBoxItem Content="B5" />
-                <ComboBoxItem Content="B4" />
-                <ComboBoxItem Content="E4" />
-            </ComboBox>
+            <ComboBox Name="cbRozmiarKoperty" Visibility="Visible"/>
+
 
             <!-- ComboBox wyboru rozmiaru paczki -->
-            <ComboBox Name="cbRozmiarPaczki" Visibility="Collapsed">
-                <ComboBoxItem Content="3x38x64" />
-                <ComboBoxItem Content="19x38x64" />
-                <ComboBoxItem Content="41x38x64" />
-            </ComboBox>
+            <ComboBox Name="cbRozmiarPaczki" Visibility="Collapsed"/>
 
             <TextBlock Text="Waga przesyłki:" />
 
             <!-- ComboBox wyboru wagi -->
-            <ComboBox Name="cbWaga">
-                <ComboBoxItem Content="do 1kg" />
-                <ComboBoxItem Content="do 5kg" />
-                <ComboBoxItem Content="do 10kg" />
-                <ComboBoxItem Content="do 25kg" />
-                <ComboBoxItem Content="więcej niż 25kg" />
-            </ComboBox>
-
+            <ComboBox Name="cbWaga"/>
 
             <TextBlock Text="Nazwa nadawcy:" />
             <TextBox x:Name="txtNazwaNadawcy" />

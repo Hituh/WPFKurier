@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data.SqlClient;
 
 namespace CourierApp
 {
@@ -20,9 +21,90 @@ namespace CourierApp
         public NadajPrzesylkeWindow()
         {
             InitializeComponent();
+            List<string> koperty = PobierzKoperty();
+            List<string> paczki = PobierzPaczki();
+            List<string> wagi = PobierzWagi();
+            cbRozmiarPaczki.ItemsSource = paczki;
+            cbRozmiarKoperty.ItemsSource = koperty;
+            cbWaga.ItemsSource = wagi;
         }
 
-     
+        private List<string> PobierzPaczki()
+        {
+            List<string> paczki = new List<string>();
+
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
+            string query = "SELECT Rozmiar FROM dbo.Paczki";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string rozmiar = reader["Rozmiar"].ToString();
+                    paczki.Add(rozmiar);
+                }
+
+                reader.Close();
+            }
+
+            return paczki;
+        }
+        private List<string> PobierzWagi()
+        {
+            List<string> wagi = new List<string>();
+
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
+            string query = "SELECT Opis FROM dbo.Waga";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string rozmiar = reader["Opis"].ToString();
+                    wagi.Add(rozmiar);
+                }
+
+                reader.Close();
+            }
+
+            return wagi;
+        }
+        private List<string> PobierzKoperty()
+        {
+            List<string> koperty = new List<string>();
+
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
+            string query = "SELECT Rozmiar FROM dbo.Koperty";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string rozmiar = reader["Rozmiar"].ToString();
+                    koperty.Add(rozmiar);
+                }
+
+                reader.Close();
+            }
+
+            return koperty;
+        }
+
         private void Nadaj_Click(object sender, RoutedEventArgs e)
         {
             // Obsługa przycisku "Nadaj"
@@ -91,7 +173,7 @@ namespace CourierApp
             if (cbWaga.SelectedItem != null)
             {
 
-                waga = ((ComboBoxItem)cbWaga.SelectedItem).Content.ToString();
+                waga = cbWaga.SelectedItem.ToString();
                 successMsg += $"Waga: {waga}\n";
             }
             else
@@ -107,7 +189,7 @@ namespace CourierApp
                 // Wybrano paczkę
                 if (cbRozmiarPaczki.SelectedItem != null)
                 {
-                    rozmiar = ((ComboBoxItem)cbRozmiarPaczki.SelectedItem).Content.ToString();
+                    rozmiar = cbRozmiarPaczki.SelectedItem.ToString();
                     successMsg = $"Rozmiar: {rozmiar}\n";
                 }
                 else
@@ -124,7 +206,7 @@ namespace CourierApp
                 // Wybrano kopertę
                 if (cbRozmiarKoperty.SelectedItem != null)
                 {
-                    rozmiar = ((ComboBoxItem)cbRozmiarKoperty.SelectedItem).Content.ToString();
+                    rozmiar = cbRozmiarKoperty.SelectedItem.ToString();
                     successMsg = $"Rozmiar: {rozmiar}\n";
                 }
                 else
