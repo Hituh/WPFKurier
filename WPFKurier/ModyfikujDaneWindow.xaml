@@ -1,0 +1,59 @@
+﻿<Window x:Class="CourierApp.ModyfikujDaneWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CourierApp"
+        mc:Ignorable="d"
+        Title="ModyfikujDaneWindow" SizeToContent="Width" Height="600">
+    <Window.Resources>
+        <DataTemplate x:Key="ElementTemplate">
+            <Border BorderBrush="LightGray" BorderThickness="1" Margin="5" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding}" FontSize="16" FontWeight="Bold" />
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5">
+                        <Button Content="Edytuj" Width="80" Margin="0,0,5,0" Click="Edytuj_Click" />
+                        <Button Content="Usuń" Width="80" Click="Usun_Click" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="10">
+            <TextBlock Text="Rozmiary kopert" FontSize="16" FontWeight="Bold" Margin="0,0,0,5" />
+            <Button Content="Dodaj rozmiar" Width="120" Click="DodajRozmiarKoperty_Click" Margin="0 0 0 10" />
+            <ScrollViewer>
+                <ListBox x:Name="lbRozmiaryKopert" Margin="0,0,0,10" ItemTemplate="{StaticResource ElementTemplate}" />
+            </ScrollViewer>
+            
+        </StackPanel>
+
+        <StackPanel Margin="10" Grid.Column="1">
+            <TextBlock Text="Rozmiary paczek" FontSize="16" FontWeight="Bold" Margin="0,0,0,5" />
+            <Button Content="Dodaj rozmiar" Width="120" Click="DodajRozmiarPaczki_Click" Margin="0 0 0 10"/>
+            <ScrollViewer>
+                <ListBox x:Name="lbRozmiaryPaczek" Margin="0,0,0,10" ItemTemplate="{StaticResource ElementTemplate}" />
+            </ScrollViewer>        
+        </StackPanel>
+
+        <StackPanel Margin="10" Grid.Column="2">
+            <TextBlock Text="Wagi" FontSize="16" FontWeight="Bold" Margin="0,0,0,5" />
+            <Button Content="Dodaj wagę" Width="120" Click="DodajWage_Click" Margin="0 0 0 10"/>
+            <ScrollViewer>
+                <ListBox x:Name="lbWagi" Margin="0,0,0,10" ItemTemplate="{StaticResource ElementTemplate}" />
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</Window>

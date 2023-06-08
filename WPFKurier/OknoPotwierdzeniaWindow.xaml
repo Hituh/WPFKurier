@@ -1,0 +1,18 @@
+﻿<Window x:Class="CourierApp.OknoPotwierdzeniaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Potwierdzenie" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Name="tbPytanie" Text="Czy na pewno chcesz usunąć ten element?" FontSize="16" HorizontalAlignment="Center" Margin="10" />
+        <TextBlock Grid.Row="1" Name="tbElement" FontSize="16" HorizontalAlignment="Center" Margin="10" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Tak" Width="80" Margin="5" Click="Tak_Click" />
+            <Button Content="Anuluj" Width="80" Margin="5" Click="Anuluj_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -25,6 +25,26 @@ namespace CourierApp
         {
             InitializeComponent();
         }
+        // MainWindow.xaml.cs
+
+        private void ModyfikujDane_Click(object sender, RoutedEventArgs e)
+        {
+            // Otwieranie okna logowania
+            LogowanieWindow logowanieWindow = new LogowanieWindow();
+
+            logowanieWindow.Left = Mouse.GetPosition(this).X;  
+            logowanieWindow.Top = Mouse.GetPosition(this).Y;
+            logowanieWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+            logowanieWindow.Owner = this;
+            if (logowanieWindow.ShowDialog() == true)
+            {
+                // Po poprawnym zalogowaniu, otwieranie okna ModyfikujDaneWindow
+                ModyfikujDaneWindow modyfikujDaneWindow = new ModyfikujDaneWindow();
+                modyfikujDaneWindow.Owner = this;
+                modyfikujDaneWindow.ShowDialog();
+            }
+        }
+
 
         private void NadajPrzesylke_Click(object sender, RoutedEventArgs e)
         {

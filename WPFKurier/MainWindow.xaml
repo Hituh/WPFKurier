@@ -16,17 +16,15 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Zarządzanie przesyłkami" FontSize="28" Foreground="White" />
-                <Button Content="Nadaj przesyłkę" HorizontalAlignment="Right" Margin="10,0,0,0" Grid.Column="1" Click="NadajPrzesylke_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="#4d5161" BorderThickness="1" BorderBrush="Black" CornerRadius="4">
-                                <TextBlock Text="Nadaj przesyłkę" FontSize="16" Foreground="White" Padding="10" />
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                <Menu Grid.Column="1">
+                    <MenuItem Header="Menu" FontSize="26">
+                        <MenuItem Header="Nadaj przesyłkę" Click="NadajPrzesylke_Click" FontSize="16"/>
+                        <MenuItem Header="Modyfikuj dane" Click="ModyfikujDane_Click" FontSize="16"/>
+                    </MenuItem>
+                </Menu>
             </Grid>
         </Border>
+
 
         <!-- Treść -->
         <StackPanel Grid.Row="1" Margin="10">
