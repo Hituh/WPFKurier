@@ -159,7 +159,7 @@ namespace CourierApp
                 string tableName = "dbo.Paczki";
                 int id = FindFreeId(connectionString, tableName, "Id_paczki");
 
-                string query = $"INSERT INTO {tableName} (Id_paczki, Rozmiar, Cnea) VALUES ('{id}', '{rozmiar}', '{cena}')";
+                string query = $"INSERT INTO {tableName} (Id_paczki, Rozmiar, Cena) VALUES ('{id}', '{rozmiar}', '{cena}')";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     SqlCommand command = new SqlCommand(query, connection);
@@ -171,23 +171,23 @@ namespace CourierApp
                 }
             }
         }
-        private void Edit_Element(string newElementName, double newElementSecondary, string ogElementName)
+        private void Edit_Element(Element newElement, string ogElementName)
         {
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
             string query = "";
             if (rozmiaryKopert.Contains(ogElementName))
             {
-                query = $"UPDATE dbo.Koperty SET Rozmiar = '{newElementName}', Cena = {newElementSecondary} WHERE Rozmiar = '{ogElementName}'";
+                query = $"UPDATE dbo.Koperty SET Rozmiar = '{newElement.Name}', Cena = {newElement.Description} WHERE Rozmiar = '{ogElementName}'";
             }
-
+            
             if (rozmiaryPaczek.Contains(ogElementName))
             {
-                query = $"UPDATE dbo.Paczki SET Rozmiar = '{newElementName}' WHERE Rozmiar = '{ogElementName}'";
+                query = $"UPDATE dbo.Paczki SET Rozmiar = '{newElement.Name}', Cena = {newElement.Description} WHERE Rozmiar = '{ogElementName}'";
             }
 
             if (wagi.Contains(ogElementName))
             {
-                query = $"UPDATE dbo.Waga SET Opis = '{newElementName}' WHERE Opis = '{ogElementName}'";
+                query = $"UPDATE dbo.Waga SET Opis = '{newElement.Name}', Mnoznik = {newElement.Description} WHERE Opis = '{ogElementName}'";
             }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -230,8 +230,8 @@ namespace CourierApp
 
             if (dialogResult == true)
             {
-                string newElement = edytujElement.myElement.Name;
-                Edit_Element(newElement, 1.0, ogElement.Name);
+                Element newElement = edytujElement.myElement;
+                Edit_Element(newElement, ogElement.Name);
                 UpdateLists();
             }
         }

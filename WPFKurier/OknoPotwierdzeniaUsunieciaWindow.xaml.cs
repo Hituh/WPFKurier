@@ -19,7 +19,8 @@ namespace CourierApp
         public OknoPotwierdzeniaUsunieciaWindow(Element element)
         {
             InitializeComponent();
-            tbElement.Text = element.Name;
+            tbElementName.Text = element.Name;
+            tbElementSecondary.Text = element.Description;
         }
         private void Tak_Click(object sender, RoutedEventArgs e)
         {

@@ -7,10 +7,12 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Name="tbPytanie" Text="Czy na pewno chcesz usunąć ten element?" FontSize="16" HorizontalAlignment="Center" Margin="10" />
-        <TextBlock Grid.Row="1" Name="tbElement" FontSize="16" HorizontalAlignment="Center" Margin="10" />
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+        <TextBlock Grid.Row="1" Name="tbElementName" FontSize="16" HorizontalAlignment="Center" Margin="10" />
+        <TextBlock Grid.Row="2" Name="tbElementSecondary" FontSize="16" HorizontalAlignment="Center" Margin="10" />
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="Tak" Width="80" Margin="5" Click="Tak_Click" />
             <Button Content="Anuluj" Width="80" Margin="5" Click="Anuluj_Click" />
         </StackPanel>

@@ -48,19 +48,17 @@ namespace CourierApp
 
         private void NadajPrzesylke_Click(object sender, RoutedEventArgs e)
         {
-            if (nadajPrzesylkeWindow == null)
+
+            NadajPrzesylkeWindow nadajPrzesylkeWindow = new NadajPrzesylkeWindow();
+            if (nadajPrzesylkeWindow != null)
             {
-                nadajPrzesylkeWindow = new NadajPrzesylkeWindow();
+                nadajPrzesylkeWindow.Left = Mouse.GetPosition(this).X;
+                nadajPrzesylkeWindow.Top = Mouse.GetPosition(this).Y;
+                nadajPrzesylkeWindow.WindowStartupLocation = WindowStartupLocation.Manual;
                 nadajPrzesylkeWindow.Owner = this;
-                nadajPrzesylkeWindow.Closed += NadajPrzesylkeWindow_Closed;
-                nadajPrzesylkeWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 nadajPrzesylkeWindow.ShowDialog();
             }
         }
 
-        private void NadajPrzesylkeWindow_Closed(object sender, EventArgs e)
-        {
-            nadajPrzesylkeWindow = null;
-        }
     }
 }

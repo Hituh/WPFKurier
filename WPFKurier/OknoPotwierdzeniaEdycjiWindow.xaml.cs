@@ -16,11 +16,6 @@ namespace CourierApp
 {
     public partial class OknoPotwierdzeniaEdycjiWindow : Window
     {
-        public class Element
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-        }
         public OknoPotwierdzeniaEdycjiWindow(Element zedytowanyElement, Element ogElement)
         {
             InitializeComponent();
