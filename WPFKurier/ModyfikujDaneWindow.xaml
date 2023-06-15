@@ -30,7 +30,16 @@
         <StackPanel x:Name="Koperty" Margin="10">
             <TextBlock Text="Rozmiary kopert" FontSize="16" FontWeight="Bold" Margin="0,0,0,5" />
             <Button Content="Dodaj rozmiar" Width="120" Click="DodajRozmiarKoperty_Click" Margin="0 0 0 10" />
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+            <Label FontSize="8" Padding="0">Sortuj według:</Label>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton FontSize="10" Name="rbKopertyNazwa" IsChecked="True" Checked="rbKopertyNazwa_Checked">Nazwa</RadioButton>
+                <RadioButton FontSize="10" Name="rbKopertyCena" Checked="rbKopertyCena_Checked">Cena</RadioButton>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Wyszukaj:" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <TextBox x:Name="tbKopertySearch" Width="120" FontSize="10" TextChanged="tbKopertySearch_TextChanged" />
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500" Visibility="Visible">
                 <ListBox x:Name="lbRozmiaryKopert" Margin="0,0,0,10" ItemTemplate="{StaticResource ElementTemplate}" />
             </ScrollViewer>
         </StackPanel>
@@ -38,7 +47,16 @@
         <StackPanel x:Name="Paczki" Margin="10" Grid.Column="1">
             <TextBlock Text="Rozmiary paczek" FontSize="16" FontWeight="Bold" Margin="0,0,0,5" />
             <Button Content="Dodaj rozmiar" Width="120" Click="DodajRozmiarPaczki_Click" Margin="0 0 0 10"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+            <Label FontSize="8" Padding="0">Sortuj według:</Label>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton FontSize="10" Name="rbKPaczkiNazwa" IsChecked="True" Checked="rbKPaczkiNazwa_Checked">Nazwa</RadioButton>
+                <RadioButton FontSize="10" Name="rbPaczkiCena" Checked="rbPaczkiCena_Checked">Cena</RadioButton>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Wyszukaj:" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <TextBox x:Name="tbPaczkiSearch" Width="120" FontSize="10" TextChanged="tbPaczkiSearch_TextChanged" />
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500" Visibility="Visible">
                 <ListBox x:Name="lbRozmiaryPaczek" Margin="0,0,0,10" ItemTemplate="{StaticResource ElementTemplate}" />
             </ScrollViewer>
         </StackPanel>
@@ -46,7 +64,16 @@
         <StackPanel x:Name="Wagi" Margin="10" Grid.Column="2">
             <TextBlock Text="Wagi" FontSize="16" FontWeight="Bold" Margin="0,0,0,5" />
             <Button Content="Dodaj wagę" Width="120" Click="DodajWage_Click" Margin="0 0 0 10"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+            <Label FontSize="8" Padding="0">Sortuj według:</Label>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton FontSize="10" Name="rbWagiNazwa" IsChecked="True" Checked="rbWagiNazwa_Checked">Nazwa</RadioButton>
+                <RadioButton FontSize="10" Name="rbWagiMnoznik" Checked="rbWagiMnoznik_Checked">Mnoznik</RadioButton>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Wyszukaj:" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <TextBox x:Name="tbWagiSearch" Width="120" FontSize="10" TextChanged="tbWagiSearch_TextChanged" />
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500" Visibility="Visible">
                 <ListBox x:Name="lbWagi" Margin="0,0,0,10" ItemTemplate="{StaticResource ElementTemplate}" />
             </ScrollViewer>
         </StackPanel>

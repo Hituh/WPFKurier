@@ -1,22 +1,25 @@
-﻿using System.Collections;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace CourierApp
 {
     public partial class ModyfikujDaneWindow : Window
     {
-        List<string> rozmiaryKopert = new List<string>();
-        List<double> cenyKopert = new List<double>();
-        List<string> rozmiaryPaczek = new List<string>();
-        List<double> cenyPaczek = new List<double>();
-        List<string> wagi = new List<string>();
-        List<double> mnoznikiWag = new List<double>();
+        private List<string> rozmiaryKopert = new List<string>();
+        private List<double> cenyKopert = new List<double>();
+        private List<string> rozmiaryPaczek = new List<string>();
+        private List<double> cenyPaczek = new List<double>();
+        private List<string> wagi = new List<string>();
+        private List<double> mnoznikiWag = new List<double>();
+
+        private List<Element> elementsKoperty = new List<Element>();
+        private List<Element> elementsPaczki = new List<Element>();
+        private List<Element> elementsWagi = new List<Element>();
         public ModyfikujDaneWindow()
         {
             InitializeComponent();
@@ -32,7 +35,6 @@ namespace CourierApp
             wagi = PobierzWagi();
             mnoznikiWag = PobierzMnoznikiWag();
 
-            List<Element> elementsKoperty = new List<Element>();
             for (int i = 0; i < rozmiaryKopert.Count; i++)
             {
                 elementsKoperty.Add(new Element
@@ -41,9 +43,10 @@ namespace CourierApp
                     Description = cenyKopert[i].ToString("C2") 
                 });
             }
+            elementsKoperty = elementsKoperty.OrderBy(element => element.Name).ToList();
+
             lbRozmiaryKopert.ItemsSource = elementsKoperty;
 
-            List<Element> elementsPaczki = new List<Element>();
             for (int i = 0; i < rozmiaryPaczek.Count; i++)
             {
                 elementsPaczki.Add(new Element
@@ -52,9 +55,10 @@ namespace CourierApp
                     Description = cenyPaczek[i].ToString("C2") 
                 });
             }
+            elementsPaczki = elementsPaczki.OrderBy(element => element.Name).ToList();
+
             lbRozmiaryPaczek.ItemsSource = elementsPaczki;
 
-            List<Element> elementsWagi = new List<Element>();
             for (int i = 0; i < wagi.Count; i++)
             {
                 elementsWagi.Add(new Element
@@ -63,6 +67,8 @@ namespace CourierApp
                     Description = mnoznikiWag[i].ToString("F2") 
                 });
             }
+            elementsWagi = elementsWagi.OrderBy(element => element.Name).ToList();
+
             lbWagi.ItemsSource = elementsWagi;
         }
 
@@ -451,5 +457,92 @@ namespace CourierApp
 
             return mnozniki;
         }
+
+        private void rbKopertyCena_Checked(object sender, RoutedEventArgs e)
+        {
+            if(elementsKoperty != null && lbRozmiaryKopert != null) {
+                elementsKoperty = elementsKoperty.OrderBy(element => element.Name).ToList();
+                lbRozmiaryKopert.ItemsSource = elementsKoperty;
+            }
+            
+        }
+
+        private void rbKopertyNazwa_Checked(object sender, RoutedEventArgs e)
+        {
+            if (elementsKoperty != null && lbRozmiaryKopert!=null)
+            {
+                elementsKoperty = elementsKoperty.OrderBy(element => element.Description).ToList();
+                lbRozmiaryKopert.ItemsSource = elementsKoperty;
+            }
+        }
+
+        private void rbKPaczkiNazwa_Checked(object sender, RoutedEventArgs e)
+        {
+            if (elementsPaczki != null && lbRozmiaryPaczek != null)
+            {
+                elementsPaczki = elementsPaczki.OrderBy(element => element.Name).ToList();
+                lbRozmiaryPaczek.ItemsSource = elementsPaczki;
+            }
+        }
+
+        private void rbPaczkiCena_Checked(object sender, RoutedEventArgs e)
+        {
+            if (elementsPaczki != null && lbRozmiaryPaczek != null)
+            {
+                elementsPaczki = elementsPaczki.OrderBy(element => element.Description).ToList();
+                lbRozmiaryPaczek.ItemsSource = elementsPaczki;
+            }
+        }
+
+        private void rbWagiNazwa_Checked(object sender, RoutedEventArgs e)
+        {
+            if (elementsWagi != null && lbWagi != null)
+            {
+                elementsWagi = elementsWagi.OrderBy(element => element.Name).ToList();
+                lbWagi.ItemsSource = elementsWagi;
+            }
+        }
+
+        private void rbWagiMnoznik_Checked(object sender, RoutedEventArgs e)
+        {
+            if (elementsWagi != null && lbWagi != null)
+            {
+                elementsWagi = elementsWagi.OrderBy(element => element.Description).ToList();
+                lbWagi.ItemsSource = elementsWagi;
+            }
+        }
+        private void tbKopertySearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = tbKopertySearch.Text.ToLower();
+
+            List<Element> filteredElements = elementsKoperty.Where(element => element.Name.ToLower().Contains(searchText) ||
+                                                                       element.Description.ToLower().Contains(searchText))
+                                                      .ToList();
+
+            lbRozmiaryKopert.ItemsSource = filteredElements;
+        }
+        private void tbPaczkiSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = tbPaczkiSearch.Text.ToLower();
+
+            List<Element> filteredElements = elementsPaczki.Where(element => element.Name.ToLower().Contains(searchText) ||
+                                                                       element.Description.ToLower().Contains(searchText))
+                                                      .ToList();
+
+            lbRozmiaryPaczek.ItemsSource = filteredElements;
+        }
+
+        private void tbWagiSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = tbWagiSearch.Text.ToLower();
+
+            List<Element> filteredElements = elementsWagi.Where(element => element.Name.ToLower().Contains(searchText) ||
+                                                                       element.Description.ToLower().Contains(searchText))
+                                                      .ToList();
+
+            lbWagi.ItemsSource = filteredElements;
+        }
+
+
     }
 }
