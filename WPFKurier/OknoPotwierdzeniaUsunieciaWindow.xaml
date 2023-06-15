@@ -1,7 +1,7 @@
-﻿<Window x:Class="CourierApp.OknoPotwierdzeniaWindow"
+﻿<Window x:Class="CourierApp.OknoPotwierdzeniaUsunieciaWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Potwierdzenie" SizeToContent="WidthAndHeight">
+        Title="PotwierdzenieUsuniecia" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

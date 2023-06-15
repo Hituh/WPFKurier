@@ -14,15 +14,18 @@ using System.Windows.Shapes;
 
 namespace CourierApp
 {
-    /// <summary>
-    /// Interaction logic for OknoPotwierdzeniaWindow.xaml
-    /// </summary>
-    public partial class OknoPotwierdzeniaWindow : Window
+    public partial class OknoPotwierdzeniaEdycjiWindow : Window
     {
-        public OknoPotwierdzeniaWindow(string element)
+        public class Element
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+        }
+        public OknoPotwierdzeniaEdycjiWindow(Element zedytowanyElement, Element ogElement)
         {
             InitializeComponent();
-            tbElement.Text = element;
+            tbElementOryginalny.Text = ogElement.Name;
+            tbElementZmieniony.Text = zedytowanyElement.Name;
         }
         private void Tak_Click(object sender, RoutedEventArgs e)
         {

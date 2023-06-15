@@ -56,7 +56,7 @@ namespace CourierApp
 
         private bool SprawdzPoprawnoscLogowania(string nazwaUzytkownika, string haslo)
         {
-            if (nazwaUzytkownika == "admin" && haslo == "admin")
+            if (nazwaUzytkownika == "1" && haslo == "1")
             {
                 return true;
             }
