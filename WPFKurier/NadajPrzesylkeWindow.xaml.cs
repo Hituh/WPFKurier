@@ -12,12 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace CourierApp
 {
     public partial class NadajPrzesylkeWindow : Window
     {
         private PotwierdzNadanie potwierdzNadanieWindow;
+        private List<Element> elementyPrzesylki;
+
         public NadajPrzesylkeWindow()
         {
             InitializeComponent();
@@ -27,6 +30,8 @@ namespace CourierApp
             cbRozmiarPaczki.ItemsSource = paczki;
             cbRozmiarKoperty.ItemsSource = koperty;
             cbWaga.ItemsSource = wagi;
+            elementyPrzesylki = new List<Element>();
+
         }
 
         private List<string> PobierzPaczki()
@@ -104,41 +109,203 @@ namespace CourierApp
 
             return koperty;
         }
-
-        private void Nadaj_Click(object sender, RoutedEventArgs e)
+        private void Dodaj_Click(object sender, RoutedEventArgs e)
         {
-            // Obsługa przycisku "Nadaj"
+            // Pobierz wybrane wartości z formularza
             string typPrzesylki = rbKoperta.IsChecked == true ? "Koperta" : "Paczka";
             string rozmiar = "";
             string waga = "";
+
+            if (rbKoperta.IsChecked == true)
+            {
+                if (cbRozmiarKoperty.SelectedItem != null)
+                {
+                    rozmiar = cbRozmiarKoperty.SelectedItem.ToString();
+                }
+            }
+            else if (rbPaczka.IsChecked == true)
+            {
+                if (cbRozmiarPaczki.SelectedItem != null)
+                {
+                    rozmiar = cbRozmiarPaczki.SelectedItem.ToString();
+                }
+            }
+
+            if (cbWaga.SelectedItem != null)
+            {
+                waga = cbWaga.SelectedItem.ToString();
+            }
+
+            // Walidacja danych
+            bool isValid = true;
+            StringBuilder validationMessage = new StringBuilder();
+
+            if (string.IsNullOrEmpty(typPrzesylki))
+            {
+                isValid = false;
+                validationMessage.AppendLine("Wybierz typ przesyłki (Koperta/Paczka).");
+            }
+
+            if (string.IsNullOrEmpty(rozmiar))
+            {
+                isValid = false;
+                validationMessage.AppendLine("Wybierz rozmiar przesyłki.");
+            }
+
+            if (string.IsNullOrEmpty(waga))
+            {
+                isValid = false;
+                validationMessage.AppendLine("Wybierz wagę przesyłki.");
+            }
+
+            // Dodawanie elementu przesyłki
+            if (isValid)
+            {
+                Element element = new Element
+                {
+                    Type = typPrzesylki,
+                    Name = rozmiar,
+                    Description = waga
+                };
+
+                elementyPrzesylki.Add(element);
+
+                lbElementy.ItemsSource = null;
+                lbElementy.ItemsSource = elementyPrzesylki;
+            }
+            else
+            {
+                // Wyświetl komunikat walidacji na ekranie
+                MessageBox.Show(validationMessage.ToString(), "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        private void Usun_Click(object sender, RoutedEventArgs e)
+        {
+            // Sprawdź, czy jest zaznaczony element do usunięcia
+            Button button = (Button)sender;
+            Element element = (Element)button.Tag;
+
+            // Usuń element z listy
+            elementyPrzesylki.Remove(element);
+
+            // Odśwież powiązanie danych
+            lbElementy.Items.Refresh();
+        }
+        private static int FindFreeId(string connectionString, string tableName, string idColumnName)
+        {
+            string query = $"SELECT {idColumnName} FROM {tableName}";
+
+            List<int> ids = new List<int>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int id = (int)reader[idColumnName];
+                    ids.Add(id);
+                }
+
+                reader.Close();
+            }
+
+            int nextFreeId = 1;
+
+            while (ids.Contains(nextFreeId))
+            {
+                nextFreeId++;
+            }
+
+            return nextFreeId;
+        }
+
+        private void Nadaj_Click(object sender, RoutedEventArgs e)
+        {
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
+
+            // Obsługa przycisku "Nadaj"
             string[] daneNadawcy = new string[2];
             string[] daneOdbiorcy = new string[2];
 
             string successMsg = "";
             string errorMsg = "";
 
-            rozmiarKopertaCheck(ref rozmiar, ref successMsg, ref errorMsg);
-            rozmiarPaczkaCheck(ref rozmiar, ref successMsg, ref errorMsg);
-            wagaCheck(ref waga, ref successMsg, ref errorMsg);
             daneNadawcyCheck(daneNadawcy, ref successMsg, ref errorMsg);
             daneObiorcyCheck(daneOdbiorcy, ref successMsg, ref errorMsg);
 
             // Przykładowa logika obsługi danych przesyłki
             if (errorMsg.Length == 0)
             {
-                if (potwierdzNadanieWindow == null)
+                // Tworzenie głównego rekordu Przesyłki
+                string insertPrzesylkaQuery = @"
+            INSERT INTO Przesyłki (PrzesyłkaId, NazwaNadawcy, NazwaOdbiorcy, AdresNadawcy, AdresOdbiorcy, DataPrzesyłki, Status)
+            VALUES (@PrzesyłkaId, @NazwaNadawcy, @NazwaOdbiorcy, @AdresNadawcy, @AdresOdbiorcy, GETDATE(), 'nadana');
+            SELECT SCOPE_IDENTITY();"; // Pobieranie identyfikatora dodanego rekordu Przesyłki
+
+                int przesyłkaId;
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    potwierdzNadanieWindow = new PotwierdzNadanie(successMsg);
-                    potwierdzNadanieWindow.Owner = this;
-                    potwierdzNadanieWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                    potwierdzNadanieWindow.ShowDialog();
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(insertPrzesylkaQuery, connection))
+                    {
+                        przesyłkaId = FindFreeId(connectionString, "dbo.Przesyłki", "PrzesyłkaId");
+                        command.Parameters.AddWithValue("@PrzesyłkaId", przesyłkaId);
+                        command.Parameters.AddWithValue("@NazwaNadawcy", daneNadawcy[0]);
+                        command.Parameters.AddWithValue("@NazwaOdbiorcy", daneOdbiorcy[0]);
+                        command.Parameters.AddWithValue("@AdresNadawcy", daneNadawcy[1]);
+                        command.Parameters.AddWithValue("@AdresOdbiorcy", daneOdbiorcy[1]);
+
+                        command.ExecuteNonQuery();
+
+                    }
+
+                    foreach (var item in lbElementy.Items)
+                    {
+                        Element element = (Element)item;
+
+                        // Tworzenie rekordu ElementyPrzesyłki i powiązanie go z głównym rekordem Przesyłki
+                        string insertElementyPrzesylkiQuery = @"
+                    INSERT INTO ElementyPrzesyłki (ElementPrzesyłkiId, PrzesyłkaId, Typ, Rozmiar, Waga)
+                    VALUES (@ElementPrzesyłkiId, @PrzesyłkaId, @Typ, @Rozmiar, @Waga);";
+
+                        using (SqlCommand command = new SqlCommand(insertElementyPrzesylkiQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@ElementPrzesyłkiId", FindFreeId(connectionString, "dbo.ElementyPrzesyłki", "ElementPrzesyłkiId"));
+
+                            command.Parameters.AddWithValue("@PrzesyłkaId", przesyłkaId);
+                            command.Parameters.AddWithValue("@Typ", element.Type);
+                            command.Parameters.AddWithValue("@Rozmiar", element.Name);
+                            command.Parameters.AddWithValue("@Waga", element.Description);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    connection.Close();
                 }
+
+                // Wyświetlanie komunikatu sukcesu
+                MessageBox.Show("Przesyłka została nadana.");
+
+                // Zamknięcie okna potwierdzenia nadania
+                this.Close();
             }
             else
             {
+                // Wyświetlanie komunikatu błędu
                 MessageBox.Show(errorMsg);
             }
         }
+
+
+
 
         private void daneNadawcyCheck(string[] daneNadawcy, ref string successMsg, ref string errorMsg)
         {

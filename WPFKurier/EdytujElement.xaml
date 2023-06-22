@@ -4,7 +4,7 @@
         Title="EdytujElement" SizeToContent="WidthAndHeight">
     <Grid>
         <StackPanel Margin="10">
-            <Label Name="lTitle" Content="Dodaj element" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
+            <Label Name="lTitle" Content="Edytuj element" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
             <Label Name="lElementName" Content="Nazwap" />
             <TextBox x:Name="tbElementName" Width="200" Margin="0,0,0,10" />
             <Label Name="lElementSecondary" Content="Nazwas" />

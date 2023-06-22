@@ -8,7 +8,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Nagłówek -->
         <Border Grid.Row="0" Background="#2D3142" Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -25,10 +24,70 @@
             </Grid>
         </Border>
 
-
-        <!-- Treść -->
-        <StackPanel Grid.Row="1" Margin="10">
-            <!-- Dodaj kontrolki do wprowadzania danych nadawcy/odbiorcy itp. -->
-        </StackPanel>
+        <ScrollViewer Grid.Row="1" Margin="10">
+            <StackPanel>
+                <ItemsControl ItemsSource="{Binding Packages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1" Margin="0 0 0 10" Padding="10">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                        <TextBlock Text="{Binding Id, StringFormat='Paczka {0} - '}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding NazwaNadawcy}" />
+                                        <StackPanel HorizontalAlignment="Right">
+                                            <Button Content="Edit" Margin="10 0 0 0" HorizontalAlignment="Right" Click="EditPackage_Click" />
+                                            <Button Content="Delete" Margin="10 0 0 0" HorizontalAlignment="Right" Click="DeletePackage_Click" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                        <TextBlock Text="Nazwa odbiorcy: " FontWeight="Bold" />
+                                        <TextBlock Text="{Binding NazwaOdbiorcy}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                        <TextBlock Text="Adres nadawcy: " FontWeight="Bold" />
+                                        <TextBlock Text="{Binding AdresNadawcy}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                        <TextBlock Text="Adres odbiorcy: " FontWeight="Bold" />
+                                        <TextBlock Text="{Binding AdresOdbiorcy}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                        <TextBlock Text="Data przesyłki: " FontWeight="Bold" />
+                                        <TextBlock Text="{Binding DataPrzesyłki, StringFormat='yyyy-MM-dd'}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                        <TextBlock Text="Status: " FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Status}" />
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding ElementyPrzesyłki}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="LightGray" BorderThickness="1" Margin="10 0 0 0" Padding="10">
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                                            <TextBlock Text="{Binding Typ}" FontSize="16" FontWeight="Bold" Width="Auto" />
+                                                            <Button Content="Edit" Margin="10 0 0 0" HorizontalAlignment="Right" Click="EditSubPackage_Click" />
+                                                            <Button Content="Delete" Margin="10 0 0 0" HorizontalAlignment="Right" Click="DeleteSubPackage_Click" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                                            <TextBlock Text="Rozmiar: " FontWeight="Bold" />
+                                                            <TextBlock Text="{Binding Rozmiar}" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                                            <TextBlock Text="Waga: " FontWeight="Bold" />
+                                                            <TextBlock Text="{Binding Waga}" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -1,38 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CourierApp
 {
-    /// <summary>
-    /// Interaction logic for PotwierdzNadanie.xaml
-    /// </summary>
     public partial class PotwierdzNadanie : Window
     {
-        public PotwierdzNadanie(string successMsg)
+        public List<Element> ElementyPrzesylki { get; set; }
+
+        public PotwierdzNadanie()
         {
             InitializeComponent();
-            tbDetails.Text = successMsg;
+            DataContext = this;
         }
 
         private void Anuluj_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            DialogResult = false;
+            Close();
         }
+
         private void Nadaj_Click(object sender, RoutedEventArgs e)
         {
-
-
+            DialogResult = true;
+            Close();
         }
     }
+
 }

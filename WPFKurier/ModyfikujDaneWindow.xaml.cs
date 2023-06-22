@@ -28,6 +28,15 @@ namespace CourierApp
 
         private void UpdateLists()
         {
+            rozmiaryKopert.Clear();
+            rozmiaryPaczek.Clear();
+            wagi.Clear();
+            cenyKopert.Clear();
+            cenyPaczek.Clear();
+            mnoznikiWag.Clear();
+            elementsKoperty.Clear();
+            elementsPaczki.Clear();
+            elementsWagi.Clear();
             rozmiaryKopert = PobierzRozmiaryKopert();
             cenyKopert = PobierzCenyKopert();
             rozmiaryPaczek = PobierzRozmiaryPaczek();
@@ -140,7 +149,7 @@ namespace CourierApp
                 string tableName = "dbo.Koperty";
                 int id = FindFreeId(connectionString, tableName, "Id_koperty");
 
-                string query = $"INSERT INTO {tableName} (Id_koperty, Rozmiar, Cnea) VALUES ('{id}', '{rozmiar}', '{cena}')";
+                string query = $"INSERT INTO {tableName} (Id_koperty, Rozmiar, Cena) VALUES ('{id}', '{rozmiar}', '{cena}')";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     SqlCommand command = new SqlCommand(query, connection);
