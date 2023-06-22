@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,20 +12,33 @@ namespace CourierApp
     {
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
 
+        private List<Package> packages = new List<Package>();
+
         public MainWindow()
         {
             InitializeComponent();
 
             // Generate random data for testing
-            List<Package> packages = GetPackagesFromDatabase();
+            UpdateDataContext();
 
             // Set the data context for binding
-            DataContext = new MainViewModel(packages);
+        }
+        private void UpdateDataContext()
+        {
+            // Get updated data from the database
+            GetPackagesFromDatabase();
+
+            // Create a new instance of MainViewModel with the updated data
+            MainViewModel viewModel = new MainViewModel(packages);
+
+            // Update the data context
+            DataContext = null; // Clear the existing DataContext
+            DataContext = viewModel; // Set the new DataContext
         }
 
-        private List<Package> GetPackagesFromDatabase()
+        private void GetPackagesFromDatabase()
         {
-            List<Package> packages = new List<Package>();
+            packages.Clear();
 
             string query = "SELECT PrzesyłkaId, NazwaNadawcy, NazwaOdbiorcy, AdresNadawcy, AdresOdbiorcy, DataPrzesyłki, Status FROM Przesyłki";
 
@@ -60,14 +74,13 @@ namespace CourierApp
                 package.ElementyPrzesyłki = GetElementsFromDatabase(package.PrzesyłkaId);
             }
 
-            return packages;
         }
 
         private List<ElementyPrzesyłki> GetElementsFromDatabase(int przesyłkaId)
         {
             List<ElementyPrzesyłki> elements = new List<ElementyPrzesyłki>();
 
-            string query = "SELECT Typ, Rozmiar, Waga FROM ElementyPrzesyłki WHERE PrzesyłkaId = @PrzesyłkaId";
+            string query = "SELECT ElementPrzesyłkiId, Typ, Rozmiar, Waga FROM ElementyPrzesyłki WHERE PrzesyłkaId = @PrzesyłkaId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -82,6 +95,7 @@ namespace CourierApp
                     {
                         ElementyPrzesyłki element = new ElementyPrzesyłki
                         {
+                            ElementPrzesyłkiId = Convert.ToInt32(reader["ElementPrzesyłkiId"]?.ToString()),
                             Typ = reader["Typ"]?.ToString(),
                             Rozmiar = reader["Rozmiar"]?.ToString(),
                             Waga = reader["Waga"]?.ToString()
@@ -98,7 +112,7 @@ namespace CourierApp
         private void ModyfikujDane_Click(object sender, RoutedEventArgs e)
         {
             // Otwieranie okna logowania
-            LogowanieWindow logowanieWindow = new LogowanieWindow();
+            Logowanie logowanieWindow = new Logowanie();
 
             logowanieWindow.Left = Mouse.GetPosition(this).X;
             logowanieWindow.Top = Mouse.GetPosition(this).Y;
@@ -107,7 +121,7 @@ namespace CourierApp
             if (logowanieWindow.ShowDialog() == true)
             {
                 // Po poprawnym zalogowaniu, otwieranie okna ModyfikujDaneWindow
-                ModyfikujDaneWindow modyfikujDaneWindow = new ModyfikujDaneWindow();
+                EdytujDane modyfikujDaneWindow = new EdytujDane();
                 modyfikujDaneWindow.Owner = this;
                 modyfikujDaneWindow.ShowDialog();
             }
@@ -115,7 +129,7 @@ namespace CourierApp
 
         private void NadajPrzesylke_Click(object sender, RoutedEventArgs e)
         {
-            NadajPrzesylkeWindow nadajPrzesylkeWindow = new NadajPrzesylkeWindow();
+            NadawaniePrzesylki nadajPrzesylkeWindow = new NadawaniePrzesylki();
             if (nadajPrzesylkeWindow != null)
             {
                 nadajPrzesylkeWindow.Left = Mouse.GetPosition(this).X;
@@ -125,7 +139,7 @@ namespace CourierApp
                 nadajPrzesylkeWindow.ShowDialog();
 
                 // Wywołanie funkcji GetPackagesFromDatabase po zamknięciu okna NadajPrzesylkeWindow
-                GetPackagesFromDatabase();
+                UpdateDataContext();
             }
         }
 
@@ -134,38 +148,83 @@ namespace CourierApp
         {
             Button editButton = (Button)sender;
             Package selectedPackage = (Package)editButton.DataContext;
-            // Perform edit action for the selected package
-            MessageBox.Show($"Edit package: {selectedPackage.PrzesyłkaId}, {selectedPackage.NazwaNadawcy}, {selectedPackage.NazwaOdbiorcy}, {selectedPackage.DataPrzesyłki}, {selectedPackage.Status}");
+
+            // Utwórz nowe okno EdytujZamówienie
+            EdytujPrzesylke editWindow = new EdytujPrzesylke(selectedPackage);
+            editWindow.Closed += EditWindow_Closed; // Dodaj obsługę zdarzenia Closed
+            editWindow.Show();
+
         }
+
+        private void EditWindow_Closed(object sender, EventArgs e)
+        {
+            // Wywołaj funkcję odświeżania listy po zamknięciu okna EdytujZamówienie
+            UpdateDataContext();
+        }
+
 
         private void DeletePackage_Click(object sender, RoutedEventArgs e)
         {
             Button deleteButton = (Button)sender;
             Package selectedPackage = (Package)deleteButton.DataContext;
-            // Perform delete action for the selected package
-            MessageBox.Show($"Delete package: {selectedPackage.PrzesyłkaId}, {selectedPackage.NazwaNadawcy}, {selectedPackage.NazwaOdbiorcy}, {selectedPackage.DataPrzesyłki}, {selectedPackage.Status}");
+
+            // Usuń przesyłkę wraz z powiązanymi elementami przesyłki
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Usuń powiązane elementy przesyłki
+                string deleteElementsQuery = "DELETE FROM dbo.ElementyPrzesyłki WHERE PrzesyłkaId = @ElementPrzesyłkiId";
+                SqlCommand deleteElementsCommand = new SqlCommand(deleteElementsQuery, connection);
+                deleteElementsCommand.Parameters.AddWithValue("@ElementPrzesyłkiId", selectedPackage.PrzesyłkaId);
+                deleteElementsCommand.ExecuteNonQuery();
+
+                // Usuń przesyłkę
+                string deletePackageQuery = "DELETE FROM dbo.Przesyłki WHERE PrzesyłkaId = @PrzesyłkaId";
+                SqlCommand deletePackageCommand = new SqlCommand(deletePackageQuery, connection);
+                deletePackageCommand.Parameters.AddWithValue("@PrzesyłkaId", selectedPackage.PrzesyłkaId);
+                deletePackageCommand.ExecuteNonQuery();
+            }
+
+            // Wywołaj zdarzenie lub metodę odświeżania listy na głównym oknie
+            UpdateDataContext();
         }
+
 
         private void EditSubPackage_Click(object sender, RoutedEventArgs e)
         {
             Button editButton = (Button)sender;
-            ElementyPrzesyłki selectedSubPackage = (ElementyPrzesyłki)editButton.DataContext;
-            // Perform edit action for the selected sub-package
-            MessageBox.Show($"Edit sub-package: {selectedSubPackage.PrzesyłkaId}, {selectedSubPackage.Typ}, {selectedSubPackage.Rozmiar}, {selectedSubPackage.Waga}");
+            ElementyPrzesyłki selectedPackage = (ElementyPrzesyłki)editButton.DataContext;
+
+            // Utwórz nowe okno EdytujZamówienie
+            EdytujElementPrzesylki editWindow = new EdytujElementPrzesylki(selectedPackage);
+            editWindow.Closed += EditWindow_Closed; // Dodaj obsługę zdarzenia Closed
+            editWindow.Show();
         }
+
 
         private void DeleteSubPackage_Click(object sender, RoutedEventArgs e)
         {
             Button deleteButton = (Button)sender;
             ElementyPrzesyłki selectedSubPackage = (ElementyPrzesyłki)deleteButton.DataContext;
             // Perform delete action for the selected sub-package
-            MessageBox.Show($"Delete sub-package: {selectedSubPackage.PrzesyłkaId}, {selectedSubPackage.Typ}, {selectedSubPackage.Rozmiar}, {selectedSubPackage.Waga}");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Usuń powiązane elementy przesyłki
+                string deleteElementsQuery = "DELETE FROM dbo.ElementyPrzesyłki WHERE ElementPrzesyłkiId = @ElementPrzesyłkiId";
+                SqlCommand deleteElementsCommand = new SqlCommand(deleteElementsQuery, connection);
+                deleteElementsCommand.Parameters.AddWithValue("@ElementPrzesyłkiId", selectedSubPackage.ElementPrzesyłkiId);
+                deleteElementsCommand.ExecuteNonQuery();
+            }
+            UpdateDataContext();
         }
-
     }
+     
 
-    public class Package
-    {
+    public class Package { 
+    
         public int PrzesyłkaId { get; set; }
         public string NazwaNadawcy { get; set; }
         public string NazwaOdbiorcy { get; set; }
@@ -183,7 +242,7 @@ namespace CourierApp
 
     public class ElementyPrzesyłki
     {
-        public string PrzesyłkaId { get; set; }
+        public int ElementPrzesyłkiId { get; set; }
         public string Typ { get; set; }
         public string Rozmiar { get; set; }
         public string Waga { get; set; }

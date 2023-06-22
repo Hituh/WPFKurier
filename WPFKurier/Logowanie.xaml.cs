@@ -17,9 +17,9 @@ namespace CourierApp
     /// <summary>
     /// Interaction logic for LogowanieWindow.xaml
     /// </summary>
-    public partial class LogowanieWindow : Window
+    public partial class Logowanie : Window
     {
-        public LogowanieWindow()
+        public Logowanie()
         {
             InitializeComponent();
         }

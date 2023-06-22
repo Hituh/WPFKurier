@@ -2,6 +2,25 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Zarządzanie przesyłkami" Height="400" Width="800">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="10 0 0 0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0 0 0 10" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+        <Style TargetType="ItemsControl">
+            <Setter Property="Margin" Value="0 10" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,80 +33,81 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Zarządzanie przesyłkami" FontSize="28" Foreground="White" />
+                <TextBlock Text="Zarządzanie przesyłkami" FontSize="28" Foreground="White" FontWeight="Bold" />
                 <Menu Grid.Column="1">
                     <MenuItem Header="Menu" FontSize="26">
-                        <MenuItem Header="Nadaj przesyłkę" Click="NadajPrzesylke_Click" FontSize="16"/>
-                        <MenuItem Header="Modyfikuj dane" Click="ModyfikujDane_Click" FontSize="16"/>
+                        <MenuItem Header="Nadaj przesyłkę" Click="NadajPrzesylke_Click" />
+                        <MenuItem Header="Modyfikuj dane" Click="ModyfikujDane_Click" />
                     </MenuItem>
                 </Menu>
             </Grid>
         </Border>
 
         <ScrollViewer Grid.Row="1" Margin="10">
-            <StackPanel>
-                <ItemsControl ItemsSource="{Binding Packages}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="LightGray" BorderThickness="1" Margin="0 0 0 10" Padding="10">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <TextBlock Text="{Binding Id, StringFormat='Paczka {0} - '}" FontWeight="Bold" />
-                                        <TextBlock Text="{Binding NazwaNadawcy}" />
-                                        <StackPanel HorizontalAlignment="Right">
-                                            <Button Content="Edit" Margin="10 0 0 0" HorizontalAlignment="Right" Click="EditPackage_Click" />
-                                            <Button Content="Delete" Margin="10 0 0 0" HorizontalAlignment="Right" Click="DeletePackage_Click" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <TextBlock Text="Nazwa odbiorcy: " FontWeight="Bold" />
-                                        <TextBlock Text="{Binding NazwaOdbiorcy}" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <TextBlock Text="Adres nadawcy: " FontWeight="Bold" />
-                                        <TextBlock Text="{Binding AdresNadawcy}" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <TextBlock Text="Adres odbiorcy: " FontWeight="Bold" />
-                                        <TextBlock Text="{Binding AdresOdbiorcy}" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <TextBlock Text="Data przesyłki: " FontWeight="Bold" />
-                                        <TextBlock Text="{Binding DataPrzesyłki, StringFormat='yyyy-MM-dd'}" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <TextBlock Text="Status: " FontWeight="Bold" />
-                                        <TextBlock Text="{Binding Status}" />
-                                    </StackPanel>
-                                    <ItemsControl ItemsSource="{Binding ElementyPrzesyłki}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="LightGray" BorderThickness="1" Margin="10 0 0 0" Padding="10">
-                                                    <StackPanel>
-                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                                            <TextBlock Text="{Binding Typ}" FontSize="16" FontWeight="Bold" Width="Auto" />
-                                                            <Button Content="Edit" Margin="10 0 0 0" HorizontalAlignment="Right" Click="EditSubPackage_Click" />
-                                                            <Button Content="Delete" Margin="10 0 0 0" HorizontalAlignment="Right" Click="DeleteSubPackage_Click" />
-                                                        </StackPanel>
-                                                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                                            <TextBlock Text="Rozmiar: " FontWeight="Bold" />
-                                                            <TextBlock Text="{Binding Rozmiar}" />
-                                                        </StackPanel>
-                                                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                                            <TextBlock Text="Waga: " FontWeight="Bold" />
-                                                            <TextBlock Text="{Binding Waga}" />
-                                                        </StackPanel>
-                                                    </StackPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+            <ItemsControl ItemsSource="{Binding Packages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0 0 0 0">
+                            <StackPanel Margin="0 5 0 0">
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock FontWeight="Bold" Text="{Binding PrzesyłkaId, StringFormat='Przesyłka {0} - '}" />
+                                    <Button Content="Edytuj" Click="EditPackage_Click" />
+                                    <Button Content="Usuń" Click="DeletePackage_Click" />
                                 </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Nazwa nadawcy: " />
+                                    <TextBlock Text="{Binding NazwaNadawcy}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Nazwa odbiorcy: " />
+                                    <TextBlock Text="{Binding NazwaOdbiorcy}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Adres nadawcy: " />
+                                    <TextBlock Text="{Binding AdresNadawcy}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Adres odbiorcy: " />
+                                    <TextBlock Text="{Binding AdresOdbiorcy}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Data przesyłki: " />
+                                    <TextBlock Text="{Binding DataPrzesyłki, StringFormat='yyyy-MM-dd'}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Status: " />
+                                    <TextBlock Text="{Binding Status}" />
+                                </StackPanel>
+                                <TextBlock FontWeight="Bold" Text="Zawartość Przesyłki:" Width="Auto" />
+
+                                <ItemsControl ItemsSource="{Binding ElementyPrzesyłki}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="10 0 0 0" >
+                                                <StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Typ}" Width="Auto" />
+                                                        <Button Content="Edytuj" Click="EditSubPackage_Click" />
+                                                        <Button Content="Usuń" Click="DeleteSubPackage_Click" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock FontWeight="Bold" Text="Rozmiar: " />
+                                                        <TextBlock Text="{Binding Rozmiar}" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock FontWeight="Bold" Text="Waga: " />
+                                                        <TextBlock Text="{Binding Waga}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </Grid>
 </Window>

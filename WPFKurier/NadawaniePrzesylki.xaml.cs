@@ -16,12 +16,12 @@ using System.Diagnostics;
 
 namespace CourierApp
 {
-    public partial class NadajPrzesylkeWindow : Window
+    public partial class NadawaniePrzesylki : Window
     {
         private PotwierdzNadanie potwierdzNadanieWindow;
         private List<Element> elementyPrzesylki;
 
-        public NadajPrzesylkeWindow()
+        public NadawaniePrzesylki()
         {
             InitializeComponent();
             List<string> koperty = PobierzKoperty();
@@ -245,7 +245,7 @@ namespace CourierApp
                 // Tworzenie głównego rekordu Przesyłki
                 string insertPrzesylkaQuery = @"
             INSERT INTO Przesyłki (PrzesyłkaId, NazwaNadawcy, NazwaOdbiorcy, AdresNadawcy, AdresOdbiorcy, DataPrzesyłki, Status)
-            VALUES (@PrzesyłkaId, @NazwaNadawcy, @NazwaOdbiorcy, @AdresNadawcy, @AdresOdbiorcy, GETDATE(), 'nadana');
+            VALUES (@PrzesyłkaId, @NazwaNadawcy, @NazwaOdbiorcy, @AdresNadawcy, @AdresOdbiorcy, GETDATE(), 'nadano');
             SELECT SCOPE_IDENTITY();"; // Pobieranie identyfikatora dodanego rekordu Przesyłki
 
                 int przesyłkaId;
@@ -255,7 +255,7 @@ namespace CourierApp
 
                     using (SqlCommand command = new SqlCommand(insertPrzesylkaQuery, connection))
                     {
-                        przesyłkaId = FindFreeId(connectionString, "dbo.Przesyłki", "PrzesyłkaId");
+                         przesyłkaId = FindFreeId(connectionString, "dbo.Przesyłki", "PrzesyłkaId");
                         command.Parameters.AddWithValue("@PrzesyłkaId", przesyłkaId);
                         command.Parameters.AddWithValue("@NazwaNadawcy", daneNadawcy[0]);
                         command.Parameters.AddWithValue("@NazwaOdbiorcy", daneOdbiorcy[0]);

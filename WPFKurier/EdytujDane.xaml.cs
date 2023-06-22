@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace CourierApp
 {
-    public partial class ModyfikujDaneWindow : Window
+    public partial class EdytujDane : Window
     {
         private List<string> rozmiaryKopert = new List<string>();
         private List<double> cenyKopert = new List<double>();
@@ -20,7 +20,7 @@ namespace CourierApp
         private List<Element> elementsKoperty = new List<Element>();
         private List<Element> elementsPaczki = new List<Element>();
         private List<Element> elementsWagi = new List<Element>();
-        public ModyfikujDaneWindow()
+        public EdytujDane()
         {
             InitializeComponent();
             UpdateLists();
@@ -294,7 +294,7 @@ namespace CourierApp
 
             if (ogElement != null)
             {
-                OknoPotwierdzeniaUsunieciaWindow oknoPotwierdzenia = new OknoPotwierdzeniaUsunieciaWindow(ogElement);
+                PotwierdzUsuniecieDanych oknoPotwierdzenia = new PotwierdzUsuniecieDanych(ogElement);
 
                 // Wyświetlanie okna dialogowego i oczekiwanie na wynik
                 bool? dialogResult = oknoPotwierdzenia.ShowDialog();
@@ -470,7 +470,7 @@ namespace CourierApp
         private void rbKopertyCena_Checked(object sender, RoutedEventArgs e)
         {
             if(elementsKoperty != null && lbRozmiaryKopert != null) {
-                elementsKoperty = elementsKoperty.OrderBy(element => element.Name).ToList();
+                elementsKoperty = elementsKoperty.OrderBy(element => element.Description).ToList();
                 lbRozmiaryKopert.ItemsSource = elementsKoperty;
             }
             
@@ -480,7 +480,7 @@ namespace CourierApp
         {
             if (elementsKoperty != null && lbRozmiaryKopert!=null)
             {
-                elementsKoperty = elementsKoperty.OrderBy(element => element.Description).ToList();
+                elementsKoperty = elementsKoperty.OrderBy(element => element.Name).ToList();
                 lbRozmiaryKopert.ItemsSource = elementsKoperty;
             }
         }
@@ -489,7 +489,7 @@ namespace CourierApp
         {
             if (elementsPaczki != null && lbRozmiaryPaczek != null)
             {
-                elementsPaczki = elementsPaczki.OrderBy(element => element.Name).ToList();
+                elementsPaczki = elementsPaczki.OrderBy(element => element.Description).ToList();
                 lbRozmiaryPaczek.ItemsSource = elementsPaczki;
             }
         }
@@ -498,7 +498,7 @@ namespace CourierApp
         {
             if (elementsPaczki != null && lbRozmiaryPaczek != null)
             {
-                elementsPaczki = elementsPaczki.OrderBy(element => element.Description).ToList();
+                elementsPaczki = elementsPaczki.OrderBy(element => element.Name).ToList();
                 lbRozmiaryPaczek.ItemsSource = elementsPaczki;
             }
         }
@@ -507,7 +507,7 @@ namespace CourierApp
         {
             if (elementsWagi != null && lbWagi != null)
             {
-                elementsWagi = elementsWagi.OrderBy(element => element.Name).ToList();
+                elementsWagi = elementsWagi.OrderBy(element => element.Description).ToList();
                 lbWagi.ItemsSource = elementsWagi;
             }
         }
@@ -516,7 +516,7 @@ namespace CourierApp
         {
             if (elementsWagi != null && lbWagi != null)
             {
-                elementsWagi = elementsWagi.OrderBy(element => element.Description).ToList();
+                elementsWagi = elementsWagi.OrderBy(element => element.Name).ToList();
                 lbWagi.ItemsSource = elementsWagi;
             }
         }

@@ -14,13 +14,13 @@ using System.Windows.Shapes;
 
 namespace CourierApp
 {
-    public partial class OknoPotwierdzeniaEdycjiWindow : Window
+    public partial class PotwierdzUsuniecieDanych : Window
     {
-        public OknoPotwierdzeniaEdycjiWindow(Element zedytowanyElement, Element ogElement)
+        public PotwierdzUsuniecieDanych(Element element)
         {
             InitializeComponent();
-            tbElementOryginalny.Text = ogElement.Name;
-            tbElementZmieniony.Text = zedytowanyElement.Name;
+            tbElementName.Text = element.Name;
+            tbElementSecondary.Text = element.Description;
         }
         private void Tak_Click(object sender, RoutedEventArgs e)
         {
