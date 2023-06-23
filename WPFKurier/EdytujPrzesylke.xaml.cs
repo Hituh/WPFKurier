@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace CourierApp
 {
@@ -31,8 +27,6 @@ namespace CourierApp
             EditedElementZamowienia.NazwaOdbiorcy = NazwaOdbiorcyTextBox.Text;
             EditedElementZamowienia.AdresOdbiorcy = AdresOdbiorcyTextBox.Text;
             EditedElementZamowienia.Status = StatusTextBox.Text;
-            // Wywołaj zdarzenie lub metodę odświeżania listy na głównym oknie
-            // Przykład: MainWindow.RefreshPackageList();
 
             // Aktualizacja tabeli w bazie danych
             using (SqlConnection connection = new SqlConnection(connectionString))

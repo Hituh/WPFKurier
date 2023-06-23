@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -221,10 +220,11 @@ namespace CourierApp
             UpdateDataContext();
         }
     }
-     
 
-    public class Package { 
-    
+
+    public class Package
+    {
+
         public int PrzesyłkaId { get; set; }
         public string NazwaNadawcy { get; set; }
         public string NazwaOdbiorcy { get; set; }

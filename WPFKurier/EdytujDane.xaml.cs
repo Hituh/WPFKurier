@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Windows;
-using System.Windows.Controls;
 using System.Diagnostics;
 using System.Linq;
-using System.Xml.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CourierApp
 {
@@ -49,7 +48,7 @@ namespace CourierApp
                 elementsKoperty.Add(new Element
                 {
                     Name = rozmiaryKopert[i],
-                    Description = cenyKopert[i].ToString("C2") 
+                    Description = cenyKopert[i].ToString("C2")
                 });
             }
             elementsKoperty = elementsKoperty.OrderBy(element => element.Name).ToList();
@@ -61,7 +60,7 @@ namespace CourierApp
                 elementsPaczki.Add(new Element
                 {
                     Name = rozmiaryPaczek[i],
-                    Description = cenyPaczek[i].ToString("C2") 
+                    Description = cenyPaczek[i].ToString("C2")
                 });
             }
             elementsPaczki = elementsPaczki.OrderBy(element => element.Name).ToList();
@@ -73,7 +72,7 @@ namespace CourierApp
                 elementsWagi.Add(new Element
                 {
                     Name = wagi[i],
-                    Description = mnoznikiWag[i].ToString("F2") 
+                    Description = mnoznikiWag[i].ToString("F2")
                 });
             }
             elementsWagi = elementsWagi.OrderBy(element => element.Name).ToList();
@@ -117,7 +116,7 @@ namespace CourierApp
         {
             DodajElement dodajElement = new DodajElement("waga");
             bool? dialogResult = dodajElement.ShowDialog();
-            if(dialogResult == true)
+            if (dialogResult == true)
             {
                 string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
                 string opis = dodajElement.myElement.Name;
@@ -141,7 +140,7 @@ namespace CourierApp
         {
             DodajElement dodajElement = new DodajElement("koperta");
             bool? dialogResult = dodajElement.ShowDialog();
-            if(dialogResult == true)
+            if (dialogResult == true)
             {
                 string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=WPF;";
                 string rozmiar = dodajElement.myElement.Name;
@@ -160,7 +159,7 @@ namespace CourierApp
                     UpdateLists();
                 }
             }
-            
+
         }
         private void DodajRozmiarPaczki_Click(object sender, RoutedEventArgs e)
         {
@@ -194,7 +193,7 @@ namespace CourierApp
             {
                 query = $"UPDATE dbo.Koperty SET Rozmiar = '{newElement.Name}', Cena = {newElement.Description} WHERE Rozmiar = '{ogElementName}'";
             }
-            
+
             if (rozmiaryPaczek.Contains(ogElementName))
             {
                 query = $"UPDATE dbo.Paczki SET Rozmiar = '{newElement.Name}', Cena = {newElement.Description} WHERE Rozmiar = '{ogElementName}'";
@@ -469,16 +468,17 @@ namespace CourierApp
 
         private void rbKopertyCena_Checked(object sender, RoutedEventArgs e)
         {
-            if(elementsKoperty != null && lbRozmiaryKopert != null) {
+            if (elementsKoperty != null && lbRozmiaryKopert != null)
+            {
                 elementsKoperty = elementsKoperty.OrderBy(element => element.Description).ToList();
                 lbRozmiaryKopert.ItemsSource = elementsKoperty;
             }
-            
+
         }
 
         private void rbKopertyNazwa_Checked(object sender, RoutedEventArgs e)
         {
-            if (elementsKoperty != null && lbRozmiaryKopert!=null)
+            if (elementsKoperty != null && lbRozmiaryKopert != null)
             {
                 elementsKoperty = elementsKoperty.OrderBy(element => element.Name).ToList();
                 lbRozmiaryKopert.ItemsSource = elementsKoperty;

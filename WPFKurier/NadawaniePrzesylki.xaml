@@ -28,12 +28,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Nagłówek -->
         <Border Grid.Row="0" Background="#2D3142" Padding="10" Grid.ColumnSpan="2">
             <TextBlock Text="Nadaj przesyłkę" FontSize="20" Foreground="White" />
         </Border>
 
-        <!-- Treść -->
         <ScrollViewer Grid.Row="1" Margin="10">
             <StackPanel>
                 <StackPanel>
@@ -63,16 +61,13 @@
 
                         <TextBlock Text="Rozmiar:" />
                         <ComboBox x:Name="cbRozmiarKoperty" Visibility="Collapsed">
-                            <!-- Dodaj opcje rozmiarów kopert -->
                         </ComboBox>
 
                         <ComboBox x:Name="cbRozmiarPaczki" Visibility="Visible">
-                            <!-- Dodaj opcje rozmiarów paczek -->
                         </ComboBox>
 
                         <TextBlock Text="Waga:" />
                         <ComboBox x:Name="cbWaga">
-                            <!-- Dodaj opcje wag -->
                         </ComboBox>
 
                         <Button Content="Dodaj" Click="Dodaj_Click" />

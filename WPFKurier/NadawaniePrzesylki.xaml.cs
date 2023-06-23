@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data.SqlClient;
-using System.Diagnostics;
 
 namespace CourierApp
 {
@@ -236,10 +226,15 @@ namespace CourierApp
             string successMsg = "";
             string errorMsg = "";
 
+
             daneNadawcyCheck(daneNadawcy, ref successMsg, ref errorMsg);
             daneObiorcyCheck(daneOdbiorcy, ref successMsg, ref errorMsg);
 
             // Przykładowa logika obsługi danych przesyłki
+            if (lbElementy.Items.Count == 0 )
+            {
+                errorMsg += "W przesyłce nie ma żadnych elementów";
+            }
             if (errorMsg.Length == 0)
             {
                 // Tworzenie głównego rekordu Przesyłki
@@ -255,7 +250,7 @@ namespace CourierApp
 
                     using (SqlCommand command = new SqlCommand(insertPrzesylkaQuery, connection))
                     {
-                         przesyłkaId = FindFreeId(connectionString, "dbo.Przesyłki", "PrzesyłkaId");
+                        przesyłkaId = FindFreeId(connectionString, "dbo.Przesyłki", "PrzesyłkaId");
                         command.Parameters.AddWithValue("@PrzesyłkaId", przesyłkaId);
                         command.Parameters.AddWithValue("@NazwaNadawcy", daneNadawcy[0]);
                         command.Parameters.AddWithValue("@NazwaOdbiorcy", daneOdbiorcy[0]);
@@ -335,54 +330,6 @@ namespace CourierApp
             }
         }
 
-        private void wagaCheck(ref string waga, ref string successMsg, ref string errorMsg)
-        {
-            if (cbWaga.SelectedItem != null)
-            {
-
-                waga = cbWaga.SelectedItem.ToString();
-                successMsg += $"Waga: {waga}\n";
-            }
-            else
-            {
-                errorMsg += "Pole waga nie może być puste\n";
-            }
-        }
-
-        private void rozmiarPaczkaCheck(ref string rozmiar, ref string successMsg, ref string errorMsg)
-        {
-            if (rbPaczka.IsChecked == true)
-            {
-                // Wybrano paczkę
-                if (cbRozmiarPaczki.SelectedItem != null)
-                {
-                    rozmiar = cbRozmiarPaczki.SelectedItem.ToString();
-                    successMsg = $"Rozmiar: {rozmiar}\n";
-                }
-                else
-                {
-                    errorMsg += "Pole rozmiar przesyłki nie może być puste\n";
-                }
-            }
-        }
-
-        private void rozmiarKopertaCheck(ref string rozmiar, ref string successMsg, ref string errorMsg)
-        {
-            if (rbKoperta.IsChecked == true)
-            {
-                // Wybrano kopertę
-                if (cbRozmiarKoperty.SelectedItem != null)
-                {
-                    rozmiar = cbRozmiarKoperty.SelectedItem.ToString();
-                    successMsg = $"Rozmiar: {rozmiar}\n";
-                }
-                else
-                {
-                    errorMsg += "Pole rozmiar przesyłki nie może być puste\n";
-                }
-            }
-        }
-
         private void rbKoperta_Checked(object sender, RoutedEventArgs e)
         {
             if (rbKoperta.IsChecked == true)
@@ -409,6 +356,6 @@ namespace CourierApp
 
             }
         }
-     
+
     }
 }
